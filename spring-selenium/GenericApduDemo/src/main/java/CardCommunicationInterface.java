@@ -1,4 +1,5 @@
 import javax.smartcardio.*;
+import java.util.List;
 
 public class CardCommunicationInterface {
     private CardChannel cardChannel;
@@ -7,7 +8,21 @@ public class CardCommunicationInterface {
         // Kart okuyucuya bağlan
         TerminalFactory terminalFactory = TerminalFactory.getDefault();
         CardTerminals terminals = terminalFactory.terminals();
-        CardTerminal terminal = terminals.list().get(0); // İlk terminali seç
+
+        System.out.println("Available card readers: " + terminals.list());
+
+        List<CardTerminal> terminalList = terminals.list();
+        if (terminalList.isEmpty()) {
+            throw new Exception("No card readers found. Please connect a card reader.");
+        }
+
+        // İlk terminali seç
+        CardTerminal terminal = terminalList.get(0);
+        System.out.println("Selected card reader: " + terminal.getName());
+
+        if (!terminal.isCardPresent()) {
+            throw new Exception("No card detected in the card reader. Please insert a card.");
+        }
 
         // Kartı bağla ve kanal oluştur
         Card card = terminal.connect("*");
