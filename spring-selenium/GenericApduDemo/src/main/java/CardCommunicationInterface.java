@@ -28,6 +28,9 @@ public class CardCommunicationInterface {
         Card card = terminal.connect("*");
         this.cardChannel = card.getBasicChannel();
         System.out.println("Card connected: " + card);
+
+        ATR atr = card.getATR();
+        System.out.println("ATR:" + atr);
     }
 
     public byte[] transmit(byte[] command) throws CardException {
